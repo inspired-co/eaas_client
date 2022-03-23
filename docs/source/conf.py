@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Evaluation as a Service API'
-copyright = '2021, Weizhe Yuan, Pengfei Liu'
+copyright = '2022, Inspired Cognition Inc'
 author = 'Weizhe Yuan, Pengfei Liu'
 
 # The full version, including alpha/beta/rc tags
