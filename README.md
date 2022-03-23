@@ -1,7 +1,7 @@
 # Evaluation-as-a-Service for NLP
 <p align="center">
     <br>
-    <img src="./docs/Resources/figs/logo.png" width="400"/>
+    <img src="docs/Resources/figs/logo.png" width="400"/>
     <br>
   <a href="https://github.com/ExpressAI/eaas_client/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/expressai/DataLab" /></a>
   <a href="https://github.com/expressai/eaas_client/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/expressai/eaas_client" /></a>
