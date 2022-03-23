@@ -2,19 +2,26 @@
 Supported Metrics
 =====================
 
-https://www.science.co.il/language/Codes.php
+The two-letter code or three-letter code for each language can be found here: https://www.science.co.il/language/Codes.php. We support the following metrics:
 
-* "bart_score_summ"
-* "bart_score_mt"
-* "bert_score"
-* "bleu"
-* "chrf"
-* "comet"
-* "comet_qe"
-* "mover_score"
-* "prism"
-* "prism_qe"
-* "rouge"
+
+* :code:`bart_score_cnn_hypo_ref`: `BARTScore <https://arxiv.org/abs/2106.11520>`__ is a sequence to sequence framework based on pre-trained language model BART. :code:`bart_score_cnn_hypo_ref` uses the CNNDM finetuned BART. It calculates the average generation score of :code:`Score(hypothesis|reference)` and :code:`Score(reference|hypothesis)`.
+* :code:`bart_score_summ`: `BARTScore <https://arxiv.org/abs/2106.11520>`__ using the CNNDM finetuned BART. It calculates :code:`Score(hypothesis|source)`.
+* :code:`bart_score_mt`: `BARTScore <https://arxiv.org/abs/2106.11520>`__ using the Parabank2 finetuned BART. It calculates the average generation score of :code:`Score(hypothesis|reference)` and :code:`Score(reference|hypothesis)`.
+* :code:`bert_score_p`: `BERTScore <https://arxiv.org/abs/1904.09675>`__ is a metric designed for evaluating translated text using BERT-based matching framework. :code:`bert_score_p` calculates the BERTScore precision.
+* :code:`bert_score_r`: `BERTScore <https://arxiv.org/abs/1904.09675>`__ recall.
+* :code:`bert_score_f`: `BERTScore <https://arxiv.org/abs/1904.09675>`__ f score.
+* :code:`bleu`: `BLEU <https://aclanthology.org/P02-1040.pdf>`__ measures modified ngram matches between each candidate translation and the reference translations.
+* :code:`chrf`: `CHRF <https://aclanthology.org/W15-3049/>`__ measures the character-level ngram matches between hypothesis and reference.
+* :code:`comet`: `COMET <https://aclanthology.org/2020.emnlp-main.213/>`__ is a neural framework for training multilingual machine translation evaluation models. :code:`comet` uses the :code:`wmt20-comet-da` checkpoint which utilizes source, hypothesis and reference.
+* :code:`comet_qe`: `COMET <https://aclanthology.org/2020.emnlp-main.213/>`__ for quality estimation. :code:`comet_qe` uses the :code:`wmt20-comet-qe-da` checkpoint which utilizes only source and hypothesis.
+* :code:`mover_score`: `MoverScore <https://arxiv.org/abs/1909.02622>`__ is a metric similar to BERTScore. Different from BERTScore, it uses the Earth Mover’s Distance instead of the Euclidean Distance.
+* :code:`prism`: `PRISM <https://arxiv.org/abs/2004.14564>`__ is a sequence to sequence framework trained from scratch. :code:`prism` calculates the average generation score of :code:`Score(hypothesis|reference)` and :code:`Score(reference|hypothesis)`.
+* :code:`prism_qe`: `PRISM <https://arxiv.org/abs/2004.14564>`__ for quality estimation. It calculates :code:`Score(hypothesis| source)`.
+* :code:`rouge1`: `ROUGE-1 <https://aclanthology.org/W04-1013/>`__ refers to the overlap of unigram (each word) between the system and reference summaries.
+* :code:`rouge2`: `ROUGE-2 <https://aclanthology.org/W04-1013/>`__ refers to the overlap of bigrams between the system and reference summaries.
+* :code:`rougeL`: `ROUGE-2 <https://aclanthology.org/W04-1013/>`__ refers to the longest common subsequence between the system and reference summaries.
+
 
 
 ******************************
