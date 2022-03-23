@@ -2,7 +2,7 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Supported Analysis" href="analysis.html" /><link rel="prev" title="Installation" href="installation.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Supported Attributes" href="attributes.html" /><link rel="prev" title="Installation" href="installation.html" />
 
     <meta name="generator" content="sphinx-4.1.2, furo 2021.08.31"/>
         <title>Supported Metrics - Evaluation as a Service API 0.1 documentation</title>
@@ -156,8 +156,9 @@
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Supported Metrics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analysis.html">Supported Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="library.html">Library Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="attributes.html">Supported Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common_metrics.html">Support for Common Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompt.html">Support for Prompts</a></li>
 </ul>
 
 </div>
@@ -185,19 +186,24 @@
         </div>
         <div class="section" id="supported-metrics">
 <h1>Supported Metrics<a class="headerlink" href="#supported-metrics" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="https://www.science.co.il/language/Codes.php">https://www.science.co.il/language/Codes.php</a></p>
+<p>The two-letter code or three-letter code for each language can be found here: <a class="reference external" href="https://www.science.co.il/language/Codes.php">https://www.science.co.il/language/Codes.php</a>. We support the following metrics:</p>
 <ul class="simple">
-<li><p>“bart_score_summ”</p></li>
-<li><p>“bart_score_mt”</p></li>
-<li><p>“bert_score”</p></li>
-<li><p>“bleu”</p></li>
-<li><p>“chrf”</p></li>
-<li><p>“comet”</p></li>
-<li><p>“comet_qe”</p></li>
-<li><p>“mover_score”</p></li>
-<li><p>“prism”</p></li>
-<li><p>“prism_qe”</p></li>
-<li><p>“rouge”</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">bart_score_cnn_hypo_ref</span></code>: <a class="reference external" href="https://arxiv.org/abs/2106.11520">BARTScore</a> is a sequence to sequence framework based on pre-trained language model BART. <code class="code docutils literal notranslate"><span class="pre">bart_score_cnn_hypo_ref</span></code> uses the CNNDM finetuned BART. It calculates the average generation score of <code class="code docutils literal notranslate"><span class="pre">Score(hypothesis|reference)</span></code> and <code class="code docutils literal notranslate"><span class="pre">Score(reference|hypothesis)</span></code>.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">bart_score_summ</span></code>: <a class="reference external" href="https://arxiv.org/abs/2106.11520">BARTScore</a> using the CNNDM finetuned BART. It calculates <code class="code docutils literal notranslate"><span class="pre">Score(hypothesis|source)</span></code>.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">bart_score_mt</span></code>: <a class="reference external" href="https://arxiv.org/abs/2106.11520">BARTScore</a> using the Parabank2 finetuned BART. It calculates the average generation score of <code class="code docutils literal notranslate"><span class="pre">Score(hypothesis|reference)</span></code> and <code class="code docutils literal notranslate"><span class="pre">Score(reference|hypothesis)</span></code>.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">bert_score_p</span></code>: <a class="reference external" href="https://arxiv.org/abs/1904.09675">BERTScore</a> is a metric designed for evaluating translated text using BERT-based matching framework. <code class="code docutils literal notranslate"><span class="pre">bert_score_p</span></code> calculates the BERTScore precision.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">bert_score_r</span></code>: <a class="reference external" href="https://arxiv.org/abs/1904.09675">BERTScore</a> recall.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">bert_score_f</span></code>: <a class="reference external" href="https://arxiv.org/abs/1904.09675">BERTScore</a> f score.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">bleu</span></code>: <a class="reference external" href="https://aclanthology.org/P02-1040.pdf">BLEU</a> measures modified ngram matches between each candidate translation and the reference translations.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">chrf</span></code>: <a class="reference external" href="https://aclanthology.org/W15-3049/">CHRF</a> measures the character-level ngram matches between hypothesis and reference.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">comet</span></code>: <a class="reference external" href="https://aclanthology.org/2020.emnlp-main.213/">COMET</a> is a neural framework for training multilingual machine translation evaluation models. <code class="code docutils literal notranslate"><span class="pre">comet</span></code> uses the <code class="code docutils literal notranslate"><span class="pre">wmt20-comet-da</span></code> checkpoint which utilizes source, hypothesis and reference.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">comet_qe</span></code>: <a class="reference external" href="https://aclanthology.org/2020.emnlp-main.213/">COMET</a> for quality estimation. <code class="code docutils literal notranslate"><span class="pre">comet_qe</span></code> uses the <code class="code docutils literal notranslate"><span class="pre">wmt20-comet-qe-da</span></code> checkpoint which utilizes only source and hypothesis.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">mover_score</span></code>: <a class="reference external" href="https://arxiv.org/abs/1909.02622">MoverScore</a> is a metric similar to BERTScore. Different from BERTScore, it uses the Earth Mover’s Distance instead of the Euclidean Distance.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">prism</span></code>: <a class="reference external" href="https://arxiv.org/abs/2004.14564">PRISM</a> is a sequence to sequence framework trained from scratch. <code class="code docutils literal notranslate"><span class="pre">prism</span></code> calculates the average generation score of <code class="code docutils literal notranslate"><span class="pre">Score(hypothesis|reference)</span></code> and <code class="code docutils literal notranslate"><span class="pre">Score(reference|hypothesis)</span></code>.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">prism_qe</span></code>: <a class="reference external" href="https://arxiv.org/abs/2004.14564">PRISM</a> for quality estimation. It calculates <code class="code docutils literal notranslate"><span class="pre">Score(hypothesis|</span> <span class="pre">source)</span></code>.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rouge1</span></code>: <a class="reference external" href="https://aclanthology.org/W04-1013/">ROUGE-1</a> refers to the overlap of unigram (each word) between the system and reference summaries.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rouge2</span></code>: <a class="reference external" href="https://aclanthology.org/W04-1013/">ROUGE-2</a> refers to the overlap of bigrams between the system and reference summaries.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">rougeL</span></code>: <a class="reference external" href="https://aclanthology.org/W04-1013/">ROUGE-2</a> refers to the longest common subsequence between the system and reference summaries.</p></li>
 </ul>
 <div class="section" id="bartscore">
 <h2>BARTScore<a class="headerlink" href="#bartscore" title="Permalink to this headline">¶</a></h2>
@@ -460,12 +466,12 @@ Japanese (ja)</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="analysis.html">
+          <a class="next-page" href="attributes.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Supported Analysis</div>
+                <div class="title">Supported Attributes</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
