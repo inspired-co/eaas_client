@@ -62,7 +62,10 @@ class TestMetrics(unittest.TestCase):
                     # "rougeL"
                 ]
             else:
-                metrics = None
+                metrics = [
+                    "bleu",
+                    "rouge2",
+                ]
 
             print(f"For multiple references")
             input_file = os.path.join(curr_dir, "inputs", f"{lang}_multi_ref_tiny.jsonl")
