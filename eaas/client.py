@@ -1,6 +1,5 @@
 import json
 import sys
-import warnings
 from collections import defaultdict
 from time import gmtime, strftime
 from typing import List, Dict
@@ -15,7 +14,7 @@ BATCH_SIZE = 100
 
 
 class Client:
-    def __init__(self):
+    def __init__(self, config: Config):
         """ A client wrapper """
         self._record_end_point = "https://notebooksa.jarvislabs.ai/q-yr_VkZdJkNWZA1KFyHjP5HjPwgmaw3BXqXL8-9IU-truL4vpXUs31S2mIBaZXo/record"
         self._score_end_point = "https://notebooksa.jarvislabs.ai/q-yr_VkZdJkNWZA1KFyHjP5HjPwgmaw3BXqXL8-9IU-truL4vpXUs31S2mIBaZXo/score"
@@ -37,10 +36,6 @@ class Client:
             "rouge2",
             "rougeL"
         ]
-        self._config = None
-
-    def load_config(self, config: Config):
-        assert isinstance(config, Config), "You should pass a Config class defined in eaas.config"
         self._config = config.to_dict()
 
     @property
@@ -80,7 +75,6 @@ class Client:
     # TODO: Beautify bleu, rouge1, rouge2, rougeL
 
     def bleu(self, refs: List[List[str]], hypos: List[str], task="sum", lang="en", cal_attributes=False, **prompt_info):
-        assert self._config is not None, "You should use load_config first to load metric configurations."
         # Add the language property
         for k in self._config:
             self._config[k]["lang"] = lang
@@ -95,7 +89,6 @@ class Client:
             raise RuntimeError("Internal server error.")
         print(f"EaaS: Your request has been sent.", file=sys.stderr)
 
-        assert task == "sum"
         data = {
             "inputs": inputs,
             "metrics": ["bleu"],
@@ -125,7 +118,6 @@ class Client:
         return scores
 
     def rouge(self, rouge_name, refs: List[List[str]], hypos: List[str], task="sum", lang="en", cal_attributes=False, **prompt_info):
-        assert self._config is not None, "You should use load_config first to load metric configurations."
         # Add the language property
         for k in self._config:
             self._config[k]["lang"] = lang
@@ -139,7 +131,6 @@ class Client:
             raise RuntimeError("Internal server error.")
         print(f"EaaS: Your request has been sent.", file=sys.stderr)
 
-        assert task == "sum"
         data = {
             "inputs": inputs,
             "metrics": [rouge_name],
@@ -203,19 +194,15 @@ class Client:
                     inputs[i]["hypothesis"] = prompt_hypothesis_prefix + " " + inputs[i]["hypothesis"] + " " + prompt_hypothesis_suffix
         return inputs
 
-    def score(self, inputs: List[Dict], task="sum", metrics=None, lang="en", cal_attributes=False, **prompt_info):
-        assert self._config is not None, "You should use load_config first to load metric configurations."
+    def score(self, inputs: List[Dict], metrics: List[str], task="sum", lang="en", cal_attributes=False, **prompt_info):
 
         # Add the language property
         for k in self._config:
             self._config[k]["lang"] = lang
 
-        if metrics is None:
-            metrics = copy.deepcopy(self._valid_metrics)
-            warnings.warn("You didn't specify the metrics, will use all valid metrics by default.")
-        else:
-            for metric in metrics:
-                assert metric in self._valid_metrics, "Your have entered invalid metric, please check."
+        for metric in metrics:
+            if metric not in self._valid_metrics:
+                raise ValueError(f"Your have entered invalid metric {metric}, please check.")
 
         # First record the request
         metadata = self.log_request(inputs, metrics)
