@@ -11,7 +11,8 @@
 
 
 ## Usage
-Detailed documentation can be found [here](https://expressai.github.io/autoeval/). To install the API, simply run
+Before using EaaS, please see the [terms of use](TERMS.md).
+Detailed documentation can be found [here](https://expressai.github.io/autoeval/). To install the EaaS, simply run
 ```bash
 pip install eaas
 ```
