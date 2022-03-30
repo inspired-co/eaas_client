@@ -56,9 +56,8 @@ Notably:
 * Each dictionary consists of `source` (string, optional), `references` (list of string, optional) and `hypothesis` (string, required). `source` and `references` are optional based on the metrics you want to use. 
 * Please do not conduct any preprocessing on `source`, `references` or `hypothesis`. 
 * We expect normal-cased detokenized texts. All the preprocessing steps are taken by the metrics. 
-* Below is a simple example.
-* inputs is a list of Dict, task is the name of task (for calculating attributes), metrics is metric list, lang is the two-letter code language.
-* You can also set cal_attributes=False to save some time since some attribute calculations can be slow.
+* There are other parameters that can be set in the `score` function:  `task` is the name of task (for calculating attributes), `metrics` is metric list, `lang` is the two-letter code language, `cal_attributes` is an indicator that decides whether to calculate some task-dependent attributes.
+* You can also set `cal_attributes=False` to save some time since some attribute calculations can be slow.
 
 
 
@@ -99,14 +98,6 @@ The `task` option in the `client.score()` function decides what attributes we ca
 from eaas import Config, Client
 
 client = Client(Config())
-
-
-
-# To use this API for scoring, you need to format your input as list of dictionary. 
-# Each dictionary consists of `source` (string, optional), `references` (list of string, optional) and `hypothesis` (string, required). `source` and `references` are optional based on the metrics you want to use. 
-# Please do not conduct any preprocessing on `source`, `references` or `hypothesis`. 
-# We expect normal-cased detokenized texts. All the preprocessing steps are taken by the metrics. 
-# Below is a simple example.
 
 inputs = [{"source": "This is the source.", 
            "references": ["This is the reference one.", "This is the reference two."],
