@@ -82,7 +82,7 @@ Currently, EaaS supports the following metrics:
 * `rouge1`: [ROUGE-1](https://aclanthology.org/W04-1013/) refers to the overlap of unigram (each word) between the system and reference summaries.
 * `rouge2`: [ROUGE-2](https://aclanthology.org/W04-1013/) refers to the overlap of bigrams between the system and reference summaries.
 * `rougeL`: [ROUGE-L](https://aclanthology.org/W04-1013/) refers to the longest common subsequence between the system and reference summaries.
-
+The default configurations for each metric can refer to this [doc](docs/default_config.md)
 ## Support for Attributes
 The `task` option in the `client.score()` function decides what attributes we calculate. Currently, we only support attributes for summarization task (`task=sum`). The following attributes (reference: [this paper](https://arxiv.org/pdf/2010.05139.pdf)) will be calculated if `cal_attributes` is set to `True` in `client.score()`. They are all reference-free.
 * `source_len`: measures the length of the source text.
