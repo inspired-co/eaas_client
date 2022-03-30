@@ -30,6 +30,8 @@ inputs = [{
     "references":["Hello, world"], 
     "hypothesis":"Hi, my world"
     }]
+metrics = ["rouge1"]    
+    
 score_dic = client.score(inputs, metrics=metrics) 
 
 
