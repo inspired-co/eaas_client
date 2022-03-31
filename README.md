@@ -82,7 +82,7 @@ Currently, EaaS supports the following metrics:
 * `rouge1`: [ROUGE-1](https://aclanthology.org/W04-1013/) refers to the overlap of unigram (each word) between the system and reference summaries.
 * `rouge2`: [ROUGE-2](https://aclanthology.org/W04-1013/) refers to the overlap of bigrams between the system and reference summaries.
 * `rougeL`: [ROUGE-L](https://aclanthology.org/W04-1013/) refers to the longest common subsequence between the system and reference summaries.
-<br>
+
 The default configurations for each metric can refer to this [doc](docs/default_config.md)
 
 ## Support for Attributes
