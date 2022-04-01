@@ -3,16 +3,16 @@
     <br>
     <img src="docs/Resources/figs/logo.png" width="400"/>
     <br>
-  <a href="https://github.com/ExpressAI/eaas_client/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/expressai/DataLab" /></a>
-  <a href="https://github.com/expressai/eaas_client/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/expressai/eaas_client" /></a>
+  <a href="https://github.com/ExpressAI/eaas_client/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/inspired-co/eaas_client" /></a>
+  <a href="https://github.com/expressai/eaas_client/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/inspired-co/eaas_client" /></a>
   <a href="https://pypi.org/project//"><img alt="PyPI" src="https://img.shields.io/pypi/v/eaas" /></a>
-  <a href=".github/workflows/ci.yml"><img alt="Integration Tests", src="https://github.com/expressai/eaas_client/actions/workflows/ci.yml/badge.svg?event=push" /></a>
+  <a href=".github/workflows/ci.yml"><img alt="Integration Tests", src="https://github.com/inspired-co/eaas_client/actions/workflows/ci.yml/badge.svg?event=push" /></a>
 </p>
 
 
 ## Usage
 Before using EaaS, please see the [terms of use](TERMS.md).
-Detailed documentation can be found [here](https://expressai.github.io/autoeval/). To install the EaaS, simply run
+Detailed documentation can be found [here](https://inspired-co.github.io/eaas_client/). To install the EaaS, simply run
 ```bash
 pip install eaas
 ```
