@@ -183,8 +183,6 @@ from eaas import Config, Client
 
 client = Client(Config())
 
-
-
 inputs = [
     {
         "source": "This is the source.",
@@ -210,3 +208,21 @@ prompt_info = {
 score_dic = client.score(inputs, task="sum", metrics=["bart_score_summ"], lang="en", cal_attributes=False, **prompt_info)
 
 ``` 
+
+## Asynchronous Requests
+
+If you want to make a call to the EaaS server to calculate some metrics and continue
+local computation while waiting for the result, you can do so as follows:
+
+```python
+from eaas import Config
+from eaas.async_client import AsyncClient
+
+config = Config()
+client = AsyncClient(config)
+
+inputs = ...
+req = client.async_score(inputs, metrics=["bleu"])
+# do some other computation
+result = req.get_result()
+```
