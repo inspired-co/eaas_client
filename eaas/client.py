@@ -59,159 +59,6 @@ class Client:
             "hypos_tokens": hypos_wc,
         }
 
-    # TODO: Beautify bleu, rouge1, rouge2, rougeL
-
-    def bleu(
-        self,
-        refs: list[list[str]],
-        hypos: list[str],
-        task="sum",
-        lang="en",
-        cal_attributes=False,
-        **prompt_info,
-    ):
-        # Add the language property
-        for k in self._config:
-            self._config[k]["lang"] = lang
-        inputs = []
-        for ref_list, hypo in zip(refs, hypos):
-            inputs.append({"source": "", "references": ref_list, "hypothesis": hypo})
-
-        inputs = self.add_prompts(inputs, **prompt_info)
-        metadata = self.log_request(inputs, ["bleu"])
-        response = requests.post(
-            url=self._endpoint_config.record_end_point, json=json.dumps(metadata)
-        )
-        if response.status_code != 200:
-            raise RuntimeError("Internal server error.")
-        print("EaaS: Your request has been sent.", file=sys.stderr)
-
-        data = {
-            "inputs": inputs,
-            "metrics": ["bleu"],
-            "config": self._config,
-            "task": task,
-            "cal_attributes": cal_attributes,
-        }
-        response = requests.post(
-            url=self._endpoint_config.score_end_point,
-            json=json.dumps(data),
-        )
-
-        rjson = response.json()
-        if response.status_code != 200:
-            raise ConnectionError(
-                f"[Error on metric: {rjson['metric']}]\n"
-                f"[Error Message]: {rjson['message']}"
-            )
-
-        final_score_dic: dict[str, float] = {}
-        scores = rjson["scores"]
-        assert len(scores["bleu"]) == len(inputs)
-        final_score_dic["bleu"] = scores["bleu"]
-        final_score_dic["corpus_bleu"] = scores["corpus_bleu"]
-        for k, v in scores.items():
-            if "attr" in k:
-                final_score_dic[k] = v
-                final_score_dic[f"corpus_{k}"] = sum(v) / len(v)
-
-        return scores
-
-    def rouge(
-        self,
-        rouge_name,
-        refs: list[list[str]],
-        hypos: list[str],
-        task="sum",
-        lang="en",
-        cal_attributes=False,
-        **prompt_info,
-    ):
-        # Add the language property
-        for k in self._config:
-            self._config[k]["lang"] = lang
-        inputs = []
-        for ref_list, hypo in zip(refs, hypos):
-            inputs.append({"source": "", "references": ref_list, "hypothesis": hypo})
-        inputs = self.add_prompts(inputs, **prompt_info)
-        metadata = self.log_request(inputs, [rouge_name])
-        response = requests.post(
-            url=self._endpoint_config.record_end_point, json=json.dumps(metadata)
-        )
-        if response.status_code != 200:
-            raise RuntimeError("Internal server error.")
-        print("EaaS: Your request has been sent.", file=sys.stderr)
-
-        data = {
-            "inputs": inputs,
-            "metrics": [rouge_name],
-            "config": self._config,
-            "task": task,
-            "cal_attributes": cal_attributes,
-        }
-        response = requests.post(
-            url=self._endpoint_config.score_end_point,
-            json=json.dumps(data),
-        )
-
-        rjson = response.json()
-        if response.status_code != 200:
-            raise ConnectionError(
-                f"[Error on metric: {rjson['metric']}]\n"
-                f"[Error Message]: {rjson['message']}"
-            )
-
-        final_score_dic = {}
-        scores = rjson["scores"]
-        assert len(scores[rouge_name]) == len(inputs)
-        final_score_dic[rouge_name] = scores[rouge_name]
-        final_score_dic[f"corpus_{rouge_name}"] = scores[f"corpus_{rouge_name}"]
-        for k, v in scores.items():
-            if "attr" in k:
-                final_score_dic[k] = v
-                final_score_dic[f"corpus_{k}"] = sum(v) / len(v)
-
-        return scores
-
-    def rouge1(
-        self,
-        refs: list[list[str]],
-        hypos: list[str],
-        task="sum",
-        lang="en",
-        cal_attributes=False,
-        **prompt_info,
-    ):
-        return self.rouge(
-            "rouge1", refs, hypos, task, lang, cal_attributes, **prompt_info
-        )
-
-    def rouge2(
-        self,
-        refs: list[list[str]],
-        hypos: list[str],
-        task="sum",
-        lang="en",
-        cal_attributes=False,
-        **prompt_info,
-    ):
-        return self.rouge(
-            "rouge2", refs, hypos, task, lang, cal_attributes, **prompt_info
-        )
-
-    def rougeL(
-        self,
-        refs: list[list[str]],
-        hypos: list[str],
-        task="sum",
-        lang="en",
-        cal_attributes=False,
-        **prompt_info,
-    ):
-        return self.rouge(
-            "rougeL", refs, hypos, task, lang, cal_attributes, **prompt_info
-        )
-
     def add_prompts(self, raw_inputs: list[dict], **prompt_info):
         inputs = copy.deepcopy(raw_inputs)
         if prompt_info:
@@ -307,24 +154,16 @@ class Client:
 
         final_score_dic: dict[str, float] = {}
 
-        def attr_in_dic(_dic):
-            _flag = False
-            for _k in _dic:
-                if "attr" in _k:
-                    _flag = True
-            return _flag
-
         # First deal with BLEU and CHRF
-        if "bleu" in metrics:
+        for my_metric in [x for x in ("bleu", "chrf") if x in metrics]:
 
+            my_cal = cal_attributes and any(["attr" in x for x in final_score_dic])
             data = {
                 "inputs": inputs,
-                "metrics": ["bleu"],
+                "metrics": [my_metric],
                 "config": self._config,
                 "task": task,
-                "cal_attributes": (not attr_in_dic(final_score_dic))
-                if cal_attributes
-                else False,
+                "cal_attributes": my_cal,
             }
             response = requests.post(
                 url=self._endpoint_config.score_end_point,
@@ -339,59 +178,24 @@ class Client:
                 )
 
             scores = rjson["scores"]
-            assert len(scores["bleu"]) == inputs_len
-            final_score_dic["bleu"] = scores["bleu"]
-            final_score_dic["corpus_bleu"] = scores["corpus_bleu"]
+            assert len(scores[my_metric]) == inputs_len
+            final_score_dic[my_metric] = scores[my_metric]
+            final_score_dic[f"corpus_{my_metric}"] = scores[f"corpus_{my_metric}"]
             for k, v in scores.items():
                 if "attr" in k:
                     final_score_dic[k] = v
                     final_score_dic[f"corpus_{k}"] = sum(v) / len(v)
-
-            metrics.remove("bleu")
-
-        if "chrf" in metrics:
-            data = {
-                "inputs": inputs,
-                "metrics": ["chrf"],
-                "config": self._config,
-                "task": task,
-                "cal_attributes": (not attr_in_dic(final_score_dic))
-                if cal_attributes
-                else False,
-            }
-            response = requests.post(
-                url=self._endpoint_config.score_end_point, json=json.dumps(data)
-            )
-
-            rjson = response.json()
-            if response.status_code != 200:
-                raise ConnectionError(
-                    f"[Error on metric: {rjson['metric']}]\n"
-                    f"[Error Message]: {rjson['message']}"
-                )
-
-            scores = rjson["scores"]
-            assert len(scores["chrf"]) == inputs_len
-            final_score_dic["chrf"] = scores["chrf"]
-            final_score_dic["corpus_chrf"] = scores["corpus_chrf"]
-            for k, v in scores.items():
-                if "attr" in k:
-                    final_score_dic[k] = v
-                    final_score_dic[f"corpus_{k}"] = sum(v) / len(v)
-
-            metrics.remove("chrf")
 
         # Deal with the inputs 100 samples at a time
         score_dic: defaultdict[str, list] = defaultdict(list)
         for i in trange(0, len(inputs), BATCH_SIZE, desc="Calculating scores."):
+            my_cal = cal_attributes and any(["attr" in x for x in final_score_dic])
             data = {
                 "inputs": inputs[i : i + BATCH_SIZE],
                 "metrics": metrics,
                 "config": self._config,
                 "task": task,
-                "cal_attributes": (not attr_in_dic(final_score_dic))
-                if cal_attributes
-                else False,
+                "cal_attributes": my_cal,
             }
 
             response = requests.post(

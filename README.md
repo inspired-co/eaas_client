@@ -19,7 +19,7 @@ pip install eaas
 
 
 ## Run your "Hello, world"
-A minimal EaaS application looks someting like this:
+A minimal EaaS application looks something like this:
 ```python
 from eaas import Config, Client
 
@@ -27,10 +27,10 @@ client = Client(Config())
 
 inputs = [{
     "source":"Hello, my world", 
-    "references":["Hello, world"], 
+    "references":["Hello, world", "Hello my world"], 
     "hypothesis":"Hi, my world"
     }]
-metrics = ["rouge1"]    
+metrics = ["rouge1", "bleu", "chrf"]    
     
 score_dic = client.score(inputs, metrics=metrics) 
 
@@ -112,67 +112,6 @@ score_dic = client.score(inputs, task="sum", metrics=metrics, lang="en", cal_att
 # inputs is a list of Dict, task is the name of task (for calculating attributes), metrics is metric list, lang is the two-letter code language.
 # You can also set cal_attributes=False to save some time since some attribute calculations can be slow.
 ```
-
-
-
-
-
-## Support for Common Metrics
-We support quick calculation for BLEU and ROUGE(1,2,L), see the following for usage.
-```python
-from eaas import Config, Client
-
-client = Client(Config())
-
-
-# Note that the input format is different from the `score` function. 
-references = [["This is the reference one for sample one.", "This is the reference two for sample one."],
-              ["This is the reference one for sample two.", "This is the reference two for sample two."]]
-hypothesis = ["This is the generated hypothesis for sample one.", 
-              "This is the generated hypothesis for sample two."]
-
-# Calculate BLEU
-client.bleu(references, hypothesis, task="sum", lang="en", cal_attributes=False)
-
-# Calculate ROUGEs
-client.rouge1(references, hypothesis, task="sum", lang="en", cal_attributes=False)
-client.rouge2(references, hypothesis, task="sum", lang="en", cal_attributes=False)
-client.rougeL(references, hypothesis, task="sum", lang="en", cal_attributes=False)
-```
-
-The output is like
-```
-# sample_level is a list of dict, corpus_level is a dict
-{
-    'sample_level': [
-        {
-            'bleu': 32.46679154750991, 
-            'attr_compression': 0.8333333333333334, 
-            'attr_copy_len': 2.0, 
-            'attr_coverage': 0.6666666666666666, 
-            'attr_density': 1.6666666666666667, 
-            'attr_hypothesis_len': 6, 
-            'attr_novelty': 0.6, 
-            'attr_repetition': 0.0, 
-            'attr_source_len': 5, 
-            'chrf': 38.56890099861521
-        }
-    ], 
-    'corpus_level': {
-        'corpus_bleu': 32.46679154750991, 
-        'corpus_attr_compression': 0.8333333333333334, 
-        'corpus_attr_copy_len': 2.0, 
-        'corpus_attr_coverage': 0.6666666666666666, 
-        'corpus_attr_density': 1.6666666666666667, 
-        'corpus_attr_hypothesis_len': 6.0, 
-        'corpus_attr_novelty': 0.6, 
-        'corpus_attr_repetition': 0.0, 
-        'corpus_attr_source_len': 5.0, 
-        'corpus_chrf': 38.56890099861521
-    }
-}
-```
-
 
 
 ## Support for Prompts
