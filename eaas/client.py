@@ -11,38 +11,22 @@ import requests
 from tqdm import trange
 
 from eaas.config import Config
+from eaas.endpoint import EndpointConfig
 
 BATCH_SIZE = 100
 
 
 class Client:
-    def __init__(self, config: Config):
+    def __init__(
+        self, config: Config, endpoint_config: EndpointConfig = EndpointConfig()
+    ):
         """A client wrapper"""
-        self._record_end_point = "https://notebooksa.jarvislabs.ai/q-yr_VkZdJkNWZA1KFyHjP5HjPwgmaw3BXqXL8-9IU-truL4vpXUs31S2mIBaZXo/record"  # noqa
-        self._score_end_point = "https://notebooksa.jarvislabs.ai/q-yr_VkZdJkNWZA1KFyHjP5HjPwgmaw3BXqXL8-9IU-truL4vpXUs31S2mIBaZXo/score"  # noqa
-        self._valid_metrics = [
-            "bart_score_cnn_hypo_ref",
-            "bart_score_summ",
-            "bart_score_mt",
-            "bert_score_p",
-            "bert_score_r",
-            "bert_score_f",
-            "bleu",
-            "chrf",
-            "comet",
-            "comet_qe",
-            "mover_score",
-            "prism",
-            "prism_qe",
-            "rouge1",
-            "rouge2",
-            "rougeL",
-        ]
         self._config = config.to_dict()
+        self._endpoint_config = endpoint_config
 
     @property
     def metrics(self):
-        return self._valid_metrics
+        return self._endpoint_config.valid_metrics
 
     @staticmethod
     def word_count(word_list):
@@ -95,7 +79,9 @@ class Client:
 
         inputs = self.add_prompts(inputs, **prompt_info)
         metadata = self.log_request(inputs, ["bleu"])
-        response = requests.post(url=self._record_end_point, json=json.dumps(metadata))
+        response = requests.post(
+            url=self._endpoint_config.record_end_point, json=json.dumps(metadata)
+        )
         if response.status_code != 200:
             raise RuntimeError("Internal server error.")
         print("EaaS: Your request has been sent.", file=sys.stderr)
@@ -108,7 +94,7 @@ class Client:
             "cal_attributes": cal_attributes,
         }
         response = requests.post(
-            url=self._score_end_point,
+            url=self._endpoint_config.score_end_point,
             json=json.dumps(data),
         )
 
@@ -149,7 +135,9 @@ class Client:
             inputs.append({"source": "", "references": ref_list, "hypothesis": hypo})
         inputs = self.add_prompts(inputs, **prompt_info)
         metadata = self.log_request(inputs, [rouge_name])
-        response = requests.post(url=self._record_end_point, json=json.dumps(metadata))
+        response = requests.post(
+            url=self._endpoint_config.record_end_point, json=json.dumps(metadata)
+        )
         if response.status_code != 200:
             raise RuntimeError("Internal server error.")
         print("EaaS: Your request has been sent.", file=sys.stderr)
@@ -162,7 +150,7 @@ class Client:
             "cal_attributes": cal_attributes,
         }
         response = requests.post(
-            url=self._score_end_point,
+            url=self._endpoint_config.score_end_point,
             json=json.dumps(data),
         )
 
@@ -299,14 +287,16 @@ class Client:
             self._config[k]["lang"] = lang
 
         for metric in metrics:
-            if metric not in self._valid_metrics:
+            if metric not in self._endpoint_config.valid_metrics:
                 raise ValueError(
                     f"Your have entered invalid metric {metric}, please check."
                 )
 
         # First record the request
         metadata = self.log_request(inputs, metrics)
-        response = requests.post(url=self._record_end_point, json=json.dumps(metadata))
+        response = requests.post(
+            url=self._endpoint_config.record_end_point, json=json.dumps(metadata)
+        )
         if response.status_code != 200:
             raise RuntimeError("Internal server error.")
         print("EaaS: Your request has been sent.", file=sys.stderr)
@@ -337,7 +327,7 @@ class Client:
                 else False,
             }
             response = requests.post(
-                url=self._score_end_point,
+                url=self._endpoint_config.score_end_point,
                 json=json.dumps(data),
             )
 
@@ -369,7 +359,9 @@ class Client:
                 if cal_attributes
                 else False,
             }
-            response = requests.post(url=self._score_end_point, json=json.dumps(data))
+            response = requests.post(
+                url=self._endpoint_config.score_end_point, json=json.dumps(data)
+            )
 
             rjson = response.json()
             if response.status_code != 200:
@@ -402,7 +394,9 @@ class Client:
                 else False,
             }
 
-            response = requests.post(url=self._score_end_point, json=json.dumps(data))
+            response = requests.post(
+                url=self._endpoint_config.score_end_point, json=json.dumps(data)
+            )
 
             rjson = response.json()
             if response.status_code != 200:
