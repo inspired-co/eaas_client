@@ -20,19 +20,20 @@ pip install eaas
 
 ## Run your "Hello, world"
 A minimal EaaS application looks something like this:
+
 ```python
 from eaas import Config, Client
 
 client = Client(Config())
 
 inputs = [{
-    "source":"Hello, my world", 
-    "references":["Hello, world", "Hello my world"], 
-    "hypothesis":"Hi, my world"
-    }]
-metrics = ["rouge1", "bleu", "chrf"]    
-    
-score_dic = client.score(inputs, metrics=metrics) 
+    "source": "Hello, my world",
+    "references": ["Hello, world", "Hello my world"],
+    "hypothesis": "Hi, my world"
+}]
+metrics = ["rouge1", "bleu", "chrf"]
+
+score_dic = client.score(inputs, metrics=metrics)
 
 
 
@@ -103,12 +104,12 @@ from eaas import Config, Client
 
 client = Client(Config())
 
-inputs = [{"source": "This is the source.", 
+inputs = [{"source": "This is the source.",
            "references": ["This is the reference one.", "This is the reference two."],
            "hypothesis": "This is the generated hypothesis."}]
-metrics = ["bleu", "chrf"] # Can be None for simplicity if you consider using all metrics
+metrics = ["bleu", "chrf"]  # Can be None for simplicity if you consider using all metrics
 
-score_dic = client.score(inputs, task="sum", metrics=metrics, lang="en", cal_attributes=True) 
+score_dic = client.score(inputs, task="sum", metrics=metrics, lang="en", cal_attributes=True)
 # inputs is a list of Dict, task is the name of task (for calculating attributes), metrics is metric list, lang is the two-letter code language.
 # You can also set cal_attributes=False to save some time since some attribute calculations can be slow.
 ```
@@ -144,7 +145,8 @@ prompt_info = {
 # Here is a simpler example.
 # prompt_info = {"source": {"prefix": "This is prefix"}}
 
-score_dic = client.score(inputs, task="sum", metrics=["bart_score_summ"], lang="en", cal_attributes=False, **prompt_info)
+score_dic = client.score(inputs, task="sum", metrics=["bart_score_summ"], lang="en", cal_attributes=False,
+                         **prompt_info)
 
 ``` 
 
