@@ -6,6 +6,7 @@ from threading import Thread
 from typing import Any
 
 from eaas import Client, Config
+from eaas.endpoint import EndpointConfig
 
 
 class AsyncRequest:
@@ -30,8 +31,10 @@ class AsyncClient(Client):
       2. `request.get_result()` to join the thread and get the result
     """
 
-    def __init__(self, config: Config):
-        super().__init__(config)
+    def __init__(
+        self, config: Config, endpoint_config: EndpointConfig = EndpointConfig()
+    ):
+        super().__init__(config, endpoint_config)
         self._threads: dict[str, Thread] = {}
         self._results: dict[str, Any] = {}
 
