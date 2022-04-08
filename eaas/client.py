@@ -54,7 +54,7 @@ class Client:
         for metric in metrics:
             if not self.validate_metric(metric):
                 raise ValueError(f"Invalid metric specification: {metric}")
-        valid_calculate = {"corpus", "sample", "stat"}
+        valid_calculate = {"corpus", "sample", "stats"}
         for calc in calculate:
             if calc not in valid_calculate:
                 raise ValueError(
