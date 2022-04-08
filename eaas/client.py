@@ -48,7 +48,7 @@ class Client:
                           * 'stat': sample-level sufficient statistics
         """
 
-        calculate = calculate if calculate is not None else ["corpus"]
+        calculate = calculate if calculate is not None else ["corpus", "sample"]
 
         # Sanity checks
         for metric in metrics:
