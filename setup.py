@@ -2,17 +2,16 @@ import codecs
 
 from setuptools import find_packages, setup
 
-import eaas
-import eaas.client
+import version
 
 setup(
     name="eaas",
-    version=eaas.__version__,
+    version=version.__version__,
     description="Evaluation as a Service for Natural Language Processing",
     long_description=codecs.open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/ExpressAI/EaaS_API",
-    author="ExpressAI",
+    url="https://github.com/inspired-co/eaas_client",
+    author="Inspired Cognition",
     license="Apache 2.0",
     classifiers=[
         "Intended Audience :: Developers",
