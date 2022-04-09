@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 from collections.abc import Callable
 from threading import Thread
-from typing import Any
+from typing import Any, Union
 
 from eaas import Client, Config
 from eaas.endpoint import EndpointConfig
@@ -51,15 +51,11 @@ class AsyncClient(Client):
     def async_score(
         self,
         inputs: list[dict],
-        task="sum",
-        metrics=None,
-        lang="en",
-        cal_attributes=False,
+        metrics: list[Union[str, dict]],
+        calculate: list[str] = None,
     ):
         return self._run_thread(
-            lambda: super(AsyncClient, self).score(
-                inputs, metrics, task, lang, cal_attributes
-            )
+            lambda: super(AsyncClient, self).score(inputs, metrics, calculate)
         )
 
     def wait_and_get_result(self, request_id: str):

@@ -42,9 +42,7 @@ class TestMetrics(unittest.TestCase):
             )
             inputs = read_jsonlines_to_list(input_file)
             # res = client.score(inputs, task="sum", metrics=None, lang=lang)
-            res = client.score(
-                inputs, task="sum", metrics=["bleu", "rouge2"], lang=lang
-            )
+            res = client.score(inputs, metrics=["bleu", "rouge2"])
             print(res)
 
             # Multi ref
@@ -78,5 +76,20 @@ class TestMetrics(unittest.TestCase):
                 curr_dir, "inputs", f"{lang}_multi_ref_tiny.jsonl"
             )
             inputs = read_jsonlines_to_list(input_file)
-            res = client.score(inputs, task="sum", metrics=metrics, lang=lang)
+            res = client.score(inputs, metrics=metrics)
             print(res)
+
+    def test_main_example(self):
+        client = Client(Config())
+
+        inputs = [
+            {
+                "source": "Hello, my world",
+                "references": ["Hello, world", "Hello my world"],
+                "hypothesis": "Hi, my world",
+            }
+        ]
+        metrics = ["rouge1", "bleu", "chrf"]
+
+        score_list = client.score(inputs, metrics=metrics)
+        print(score_list)
