@@ -6,7 +6,7 @@
   <a href="https://github.com/ExpressAI/eaas_client/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/inspired-co/eaas_client" /></a>
   <a href="https://github.com/expressai/eaas_client/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/inspired-co/eaas_client" /></a>
   <a href="https://pypi.org/project//"><img alt="PyPI" src="https://img.shields.io/pypi/v/eaas" /></a>
-  <a href=".github/workflows/ci.yml"><img alt="Integration Tests", src="https://github.com/inspired-co/eaas_client/actions/workflows/ci.yml/badge.svg?event=push" /></a>
+  <a href=".github/workflows/ci.yml"><img alt="Integration Tests" src="https://github.com/inspired-co/eaas_client/actions/workflows/ci.yml/badge.svg?event=push" /></a>
 </p>
 
 
@@ -55,15 +55,11 @@ score_dic = {'scores':
 }
 ```
 
-This is a list of the results 
-
-
 Notably: 
 * To use this API for scoring, you need to format your input as list of dictionary. 
 * Each dictionary consists of `source` (string, optional), `references` (list of string, optional) and `hypothesis` (string, required). `source` and `references` are optional based on the metrics you want to use. 
 * Please do not conduct any preprocessing on `source`, `references` or `hypothesis`. 
 * We expect normal-cased detokenized texts. All the preprocessing steps are taken by the metrics. 
-* There are other parameters that can be set in the `score` function:  `task` is the name of task (for calculating attributes), `metrics` is metric list, `lang` is the two-letter code language, `cal_attributes` is an indicator that decides whether to calculate some task-dependent attributes.
  
 ## Supported Metrics
 Currently, EaaS supports the following metrics:
