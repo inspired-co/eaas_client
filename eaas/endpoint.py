@@ -15,6 +15,8 @@ class EndpointConfig:
             "bert_score_r",
             "bert_score_f",
             "bleu",
+            "length",
+            "length_ratio",
             "chrf",
             "comet",
             "comet_qe",
