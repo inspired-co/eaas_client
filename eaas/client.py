@@ -76,8 +76,5 @@ class Client:
         # Check the request
         rjson = response.json()
         if response.status_code != 200:
-            raise ConnectionError(
-                f"[Error on metric: {rjson['metric']}]\n"
-                f"[Error Message]: {rjson['message']}"
-            )
+            raise ConnectionError(f"[Error: {rjson}]")
         return rjson
